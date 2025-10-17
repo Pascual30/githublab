@@ -1,1 +1,119 @@
-<h1>Gitugub pruebas</h1>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Validación de Cedula - Modulo 10</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .contenedor {
+      background: white;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      width: 300px;
+    }
+
+    h1 {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    button {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    .resultado {
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    .correcta {
+      color: green;
+    }
+
+    .incorrecta {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <div class="contenedor">
+    <h1>Validar Cedula Dominicana</h1>
+    <input type="text" id="cedula" placeholder="Ingrese su cedula" maxlength="13" />
+    <button onclick="validarCedula()">Validar</button>
+    <p id="resultado" class="resultado"></p>
+  </div>
+
+  <script>
+    function validarCedula() {
+      let cedula = document.getElementById("cedula").value;
+      cedula = cedula.replace(/-/g, "").trim();
+
+      const resultado = document.getElementById("resultado");
+
+      // Validar que tenga 11 dígitos
+      if (!/^\d{11}$/.test(cedula)) {
+        resultado.textContent = "CEDULA ES INCORRECTA (Formato inválido)";
+        resultado.className = "resultado incorrecta";
+        return;
+      }
+
+      let suma = 0;
+
+      for (let i = 0; i < 10; i++) {
+        let digito = parseInt(cedula.charAt(i));
+        let multiplicador = (i % 2 === 0) ? 1 : 2;
+        let producto = digito * multiplicador;
+
+        // Si el resultado tiene dos dígitos, se suman
+        if (producto >= 10) producto = Math.floor(producto / 10) + (producto % 10);
+
+        suma += producto;
+      }
+
+      let verificadorCalculado = (10 - (suma % 10)) % 10;
+      let verificadorReal = parseInt(cedula.charAt(10));
+
+      if (verificadorCalculado === verificadorReal) {
+        resultado.textContent = "CEDULA ES CORRECTA";
+        resultado.className = "resultado correcta";
+      } else {
+        resultado.textContent = "CEDULA ES INCORRECTA";
+        resultado.className = "resultado incorrecta";
+      }
+    }
+  </script>
+</body>
+</html>
+
